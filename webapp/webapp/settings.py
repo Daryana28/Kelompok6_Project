@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#static file
+STATIC_URL = '/static/' # tambahkan ini
+
+STATICFILES_DIRS = [BASE_DIR / "static",] # tambahkan ini
+
 
 # Application definition
 
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login',
     'dashbord',
+
 ]
 
 MIDDLEWARE = [

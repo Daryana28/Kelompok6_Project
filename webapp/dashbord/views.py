@@ -4,5 +4,5 @@ from django.shortcuts import render
 
 def dashbord_view(request):
     context = {}  # Define the context variable
-    return render(request, 'dashbord/dashbord_view.html', context)
+    return render(request, 'dashbord/index_view.html', context)
 
