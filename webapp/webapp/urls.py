@@ -19,8 +19,9 @@ from django.urls import path
 from login import views as login_view
 from dashbord import views as dashbord_view
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/',  login_view.login_view,  ), # tampilkan login
-    path('dashbord/', dashbord_view.dashbord_view,  ), # tampilkan dashboard
+    path('dashbord/', dashbord_view.dashbord_view, ), # tampilkan dashbord
 ]
