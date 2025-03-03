@@ -20,10 +20,32 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- AOS (Animate On Scroll) CSS & JS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
     <style>
+      /* Animasi Navbar */
+      .navbar {
+        animation: fadeInDown 1s ease-out;
+      }
       .nav-hover:hover {
         color: #a4e450 !important;
         transition: 0.3s;
+      }
+      /* Animasi Global */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       .chart-container {
         width: 100%;
@@ -31,6 +53,8 @@
         background: #222;
         padding: 20px;
         border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+        animation: fadeIn 1s ease-in-out;
       }
 
       .parent {
@@ -61,6 +85,7 @@
         justify-content: center;
         gap: 20px;
         margin-top: 50px;
+        flex-wrap: wrap;
       }
 
       .stats-card {
@@ -71,6 +96,12 @@
         border-radius: 12px;
         box-shadow: 0 4px 10px #a4e450;
         min-width: 200px;
+        transition: transform 0.3s ease-in-out;
+      }
+      /* Efek Hover untuk Card */
+      .stats-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px #a4e450;
       }
 
       .stats-icon {
@@ -88,6 +119,72 @@
       .stats-value {
         font-size: 18px;
         font-weight: bold;
+      }
+
+      /* Animasi untuk Judul */
+      h2 {
+        animation: slideIn 1s ease-out;
+      }
+
+      /* Animasi untuk Stats Card */
+      .stats-card {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s forwards;
+      }
+
+      .stats-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .stats-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .stats-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .stats-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      /* Keyframes untuk Animasi */
+      @keyframes slideIn {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      /* Animasi untuk Navbar */
+      .navbar {
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: slideDown 0.5s forwards;
+      }
+
+      /* Keyframes untuk Animasi Navbar */
+      @keyframes slideDown {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
     </style>
   </head>
@@ -135,6 +232,24 @@
     </nav>
 
     <!-- Konten Utama -->
+    <div class="container mt-4">
+      <h2 class="text-center">Statistik Pelanggaran</h2>
+      <br />
+      <div class="row">
+        <!-- Bar Chart Vertikal (Pengaduan Bulanan) -->
+        <div class="col-md-6 d-flex justify-content-center">
+          <div class="chart-container">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+        <!-- Bar Chart Horizontal (Pengaduan per Kanreg/Pusat) -->
+        <div class="col-md-6 d-flex justify-content-center">
+          <div class="chart-container">
+            <canvas id="horizontalBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="container">
       <div class="stats-container">
@@ -157,7 +272,7 @@
           </div>
         </div>
 
-        <!-- Followers -->
+        <!-- Forklif-->
         <div class="stats-card">
           <div
             class="img-container"
@@ -176,7 +291,7 @@
           </div>
         </div>
 
-        <!-- Following -->
+        <!-- Apd -->
         <div class="stats-card">
           <div
             class="img-container"
@@ -195,7 +310,7 @@
           </div>
         </div>
 
-        <!-- Saved Posts -->
+        <!-- Motor -->
         <div class="stats-card">
           <div
             class="img-container"
@@ -203,8 +318,8 @@
           >
             <a href="#"
               ><img
-                src="{% static 'img/human.jpg' %}"
-                alt="Profile"
+                src="{% static 'img/motor1.png' %}"
+                alt="Motor"
                 style="border-radius: 20%; padding: 10px"
             /></a>
           </div>
@@ -215,25 +330,6 @@
         </div>
       </div>
     </div>
-
-    <div class="container mt-4">
-      <h2 class="text-center">Statistik Pelanggaran</h2>
-      <div class="row">
-        <!-- Bar Chart Vertikal (Pengaduan Bulanan) -->
-        <div class="col-md-6 d-flex justify-content-center">
-          <div class="chart-container">
-            <canvas id="barChart"></canvas>
-          </div>
-        </div>
-        <!-- Bar Chart Horizontal (Pengaduan per Kanreg/Pusat) -->
-        <div class="col-md-6 d-flex justify-content-center">
-          <div class="chart-container">
-            <canvas id="horizontalBarChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Footer -->
     <footer class="bg-dark text-light mt-5 py-4 text-center">
       <p>&copy; 2025 CCTV Monitoring. All Rights Reserved.</p>
@@ -315,6 +411,13 @@
           scales: { x: { beginAtZero: true } },
           plugins: { legend: { display: true } },
         },
+      });
+    </script>
+    <!-- AOS Init -->
+    <script>
+      AOS.init({
+        duration: 1000,
+        once: true,
       });
     </script>
   </body>
