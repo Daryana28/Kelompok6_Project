@@ -32,6 +32,63 @@
         padding: 20px;
         border-radius: 10px;
       }
+
+      .parent {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 8px;
+      }
+
+      .div1 {
+        grid-row: span 2 / span 2;
+      }
+
+      .div2 {
+        grid-row: span 2 / span 2;
+      }
+
+      .div3 {
+        grid-row: span 2 / span 2;
+      }
+
+      .div4 {
+        grid-row: span 2 / span 2;
+      }
+      /* Styling untuk Card */
+      .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 50px;
+      }
+
+      .stats-card {
+        display: flex;
+        align-items: center;
+        background: #2c0000;
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px #a4e450;
+        min-width: 200px;
+      }
+
+      .stats-icon {
+        font-size: 24px;
+        padding: 12px;
+        border-radius: 50%;
+        color: white;
+        margin-right: 12px;
+      }
+
+      .stats-content {
+        text-align: left;
+      }
+
+      .stats-value {
+        font-size: 18px;
+        font-weight: bold;
+      }
     </style>
   </head>
   <body style="background-color: #17191a; color: #f0f8ff">
@@ -78,6 +135,87 @@
     </nav>
 
     <!-- Konten Utama -->
+
+    <div class="container">
+      <div class="stats-container">
+        <!-- Camera Views -->
+        <div class="stats-card">
+          <div
+            class="img-container"
+            style="border-radius: 20%; overflow: hidden"
+          >
+            <a href="#"
+              ><img
+                src="{% static 'img/camera.jpg' %}"
+                alt="Camera "
+                style="border-radius: 20%; padding: 10px"
+            /></a>
+          </div>
+          <div class="stats-content">
+            <div>Camera</div>
+            <div class="stats-value">berapa</div>
+          </div>
+        </div>
+
+        <!-- Followers -->
+        <div class="stats-card">
+          <div
+            class="img-container"
+            style="border-radius: 20%; overflow: hidden"
+          >
+            <a href="#"
+              ><img
+                src="{% static 'img/forkilf.jpg' %}"
+                alt="Forklift"
+                style="border-radius: 20%; padding: 10px"
+            /></a>
+          </div>
+          <div class="stats-content">
+            <div>Forklift</div>
+            <div class="stats-value">berapa</div>
+          </div>
+        </div>
+
+        <!-- Following -->
+        <div class="stats-card">
+          <div
+            class="img-container"
+            style="border-radius: 20%; overflow: hidden"
+          >
+            <a href="#">
+              <img
+                src="{% static 'img/hell.jpg' %}"
+                style="border-radius: 20%; padding: 10px"
+                alt="Hell"
+            /></a>
+          </div>
+          <div class="stats-content">
+            <div>Helm</div>
+            <div class="stats-value">berapa</div>
+          </div>
+        </div>
+
+        <!-- Saved Posts -->
+        <div class="stats-card">
+          <div
+            class="img-container"
+            style="border-radius: 20%; overflow: hidden"
+          >
+            <a href="#"
+              ><img
+                src="{% static 'img/human.jpg' %}"
+                alt="Profile"
+                style="border-radius: 20%; padding: 10px"
+            /></a>
+          </div>
+          <div class="stats-content">
+            <div>Human</div>
+            <div class="stats-value">berapa</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container mt-4">
       <h2 class="text-center">Statistik Pelanggaran</h2>
       <div class="row">
