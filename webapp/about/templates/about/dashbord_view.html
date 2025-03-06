@@ -50,7 +50,7 @@
       .chart-container {
         width: 100%;
         max-width: 600px;
-        background: #f3f1f1;
+        background: #222;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
@@ -239,16 +239,14 @@
         <!-- Bar Chart Vertikal (Pengaduan Bulanan) -->
         <div class="col-md-6 d-flex justify-content-center">
           <div class="chart-container">
-            <canvas id="DoughnutChart"></canvas>
+            <canvas id="barChart"></canvas>
           </div>
         </div>
-        <!-- Tambahkan Canvas untuk Line Chart -->
-    <div class="col-md-6 d-flex justify-content-center">
-      <div class="chart-container">
-        <canvas id="lineChart"></canvas>
-
-      </div>
-    </div>
+        <!-- Bar Chart Horizontal (Pengaduan per Kanreg/Pusat) -->
+        <div class="col-md-6 d-flex justify-content-center">
+          <div class="chart-container">
+            <canvas id="horizontalBarChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -332,131 +330,89 @@
         </div>
       </div>
     </div>
+    <!-- Footer -->
+    <footer class="bg-dark text-light mt-5 py-4 text-center">
+      <p>&copy; 2025 CCTV Monitoring. All Rights Reserved.</p>
+    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    
-
+    <!-- Chart.js Scripts -->
     <script>
-      // Data Pengaduan per Kategori Pelanggaran
-      const dataPelanggaran = [10, 600, 400, 550, 750, 300, 420, 230];
-      const dataPelanggaran2 = [100, 1, 20, 11, 34, 78, 90, 12];
-      const dataPelanggaran3 = [15, 24, 78, 65, 89, 34, 23, 56];
-      const dataPelanggaran4 = [12, 334, 56, 31, 24, 89, 14, 10];
-      const labelPelanggaran = [
-        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      // Data Pengaduan per Bulan
+      const dataBulanan = [
+        320, 450, 600, 750, 500, 620, 700, 640, 580, 740, 500, 330,
+      ];
+      const bulanLabels = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
       ];
 
-      // Inisialisasi Line Chart
-      new Chart(document.getElementById("lineChart"), {
-        type: "line",
+      // Bar Chart Vertikal (Jumlah Pengaduan Bulanan)
+      new Chart(document.getElementById("barChart"), {
+        type: "bar",
         data: {
-          labels: labelPelanggaran,
+          labels: bulanLabels,
           datasets: [
             {
               label: "Jumlah Pelanggaran",
-              data: dataPelanggaran,
-              fill: false,
-              borderColor: "rgba(255, 99, 132, 1)", // Warna merah terang
-              backgroundColor: "rgba(255, 99, 132, 0.5)",
+              data: dataBulanan,
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+              borderColor: "rgba(54, 162, 235, 1)",
               borderWidth: 2,
-              tension: 0.3, // Efek garis melengkung
-              pointBackgroundColor: "rgba(255, 99, 132, 1)",
-              pointRadius: 5,
-            },
-            {
-              label: "Jumlah Pelanggaran",
-              data: dataPelanggaran2,
-              fill: false,
-              borderColor: "rgba(25, 99, 132, 1)", // Warna merah terang
-
-              borderWidth: 2,
-              tension: 0.3, // Efek garis melengkung
-              pointBackgroundColor: "rgba(222, 99, 132, 1)",
-              pointRadius: 5,
-            },
-            {
-              label: "Jumlah Pelanggaran",
-              data: dataPelanggaran3,
-              fill: false,
-              borderColor: "rgba(25, 99, 132, 1)", // Warna merah terang
-
-              borderWidth: 2,
-              tension: 0.3, // Efek garis melengkung
-              pointBackgroundColor: "rgba(290, 99, 132, 1)",
-              pointRadius: 5,
-            },
-            {
-              label: "Jumlah Pelanggaran",
-              data: dataPelanggaran4,
-              fill: false,
-              borderColor: "rgba(25, 99, 132, 1)", // Warna merah terang
-
-              borderWidth: 2,
-              tension: 0.3, // Efek garis melengkung
-              pointBackgroundColor: "rgba(111, 99, 132, 1)",
-              pointRadius: 5,
             },
           ],
         },
         options: {
           responsive: true,
-          scales: {
-            y: { beginAtZero: true },
-          },
-          plugins: {
-            legend: { display: true },
-          },
+          scales: { y: { beginAtZero: true } },
+          plugins: { legend: { display: true } },
         },
       });
-      <!-- Chart.js Scripts -->
 
-      // Data Pengaduan per Bulan
-  const dataBulanan = [
-    320, 450, 600, 750, 500, 620, 700, 640, 580, 740, 500, 330,
-  ];
-  const bulanLabels = [
-    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-  ];
+      // Data Pengaduan per Kanreg/Pusat
+      const dataKanreg = [850, 600, 400, 550, 750, 300, 420, 230];
+      const kanregLabels = [
+        "Tidak Memakai Helm Safety",
+        "Tidak Memakai Helm SNI Berkendara",
+        "Sepeda Motor Tanpa Spion",
+        "Sepeda Motor Tanpa Plat Nomor",
+      ];
 
-  // Inisialisasi Doughnut Chart
-  new Chart(document.getElementById("DoughnutChart"), {
-    type: "doughnut",  // Perbaikan penulisan tipe grafik
-    data: {
-      labels: bulanLabels,
-      datasets: [
-        {
-          label: "Jumlah Pelanggaran",
-          data: dataBulanan,
-          backgroundColor: [
-            "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40",
-            "#C9CBCF", "#E7E9ED", "#A3E4D7", "#D98880", "#F7DC6F", "#85C1E9"
+      // Bar Chart Horizontal (Jumlah Pengaduan per Kanreg/Pusat)
+      new Chart(document.getElementById("horizontalBarChart"), {
+        type: "bar",
+        data: {
+          labels: kanregLabels,
+          datasets: [
+            {
+              label: "Jumlah Pelanggran",
+              data: dataKanreg,
+              backgroundColor: "rgba(255, 99, 132, 0.5)",
+              borderColor: "rgba(255, 99, 132, 1)",
+              borderWidth: 2,
+            },
           ],
-          borderColor: "#ffffff",
-          borderWidth: 2,
         },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-          position: "bottom",
+        options: {
+          responsive: true,
+          indexAxis: "y", // Horizontal Chart
+          scales: { x: { beginAtZero: true } },
+          plugins: { legend: { display: true } },
         },
-      },
-    },
-  });
-
-
+      });
     </script>
-    <!-- Footer -->
-    <footer class="bg-dark text-light mt-5 py-4 text-center">
-      <p>&copy; 2025 CCTV Monitoring. All Rights Reserved.</p>
-    </footer>
     <!-- AOS Init -->
     <script>
       AOS.init({
