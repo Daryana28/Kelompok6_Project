@@ -3,13 +3,15 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #17191a;
+  background-size: 2100px;
+  background-position: center;
 }
 .login-form {
   background: white;
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 10px #f0f8ff;
   animation: fadeIn 0.5s ease-in-out;
 }
 @keyframes fadeIn {
