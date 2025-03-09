@@ -22,11 +22,14 @@ from about import views as about_view
 
 
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/',  login_view.login_view,  ), # tampilkan login
     path('dashbord/', dashbord_view.dashbord_view, ), # tampilkan dashbord
     path('about/', about_view.about_view,  ), # tampilkan about
+    path('about/cctv/', about_view.cctv_feed, name='cctv_feed'), # tampilkan cctv
 
 
 ]
