@@ -1,35 +1,15 @@
-"""
-URL configuration for webapp project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from login import views as login_view
 from dashbord import views as dashbord_view
 from about import views as about_view
 
-
-
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/',  login_view.login_view,  ), # tampilkan login
-    path('dashbord/', dashbord_view.dashbord_view, ), # tampilkan dashbord
-    path('about/', about_view.about_view,  ), # tampilkan about
-    path('about/cctv/', about_view.cctv_feed, name='cctv_feed'), # tampilkan cctv
-
-
+    path('', dashbord_view.dashbord_view, name='home'),  # 🔹 Tambahkan Home View
+    path('login/', login_view.login_view, name='login'),
+    path('dashbord/', dashbord_view.dashbord_view, name='dashbord'),
+    path('about/', about_view.about_view, name='about_view'),  # 🔹 Perbaiki Nama
+    path('about/cctv/', about_view.cctv_feed, name='cctv_feed'),
+    path('video_feed/<int:cctv_index>/', about_view.cctv_feed, name='video_feed'),
 ]

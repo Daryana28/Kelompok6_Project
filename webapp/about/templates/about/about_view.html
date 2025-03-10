@@ -16,8 +16,20 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" href="{% static 'css/server.css' %}" />
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   </head>
+  <style>
+    .cctv-feed {
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      position: relative;
+    }
+    .cctv-feed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
   <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -58,28 +70,21 @@
     </nav>
 
     <!-- Konten Utama: Server CCTV -->
-    <div class="cctv-container">
+    <div class="container mt-4">
       <h2 class="text-center">Live Server CCTV</h2>
-      <div class="cctv-feed">
-        <!-- Gantilah src dengan URL streaming server CCTV -->
-         <video id="video" controls autoplay></video>
+
+      <!-- Dropdown Pilihan CCTV -->
+      <div class="text-center mt-3">
+        <label for="cctvSelect" class="form-label">Pilih CCTV:</label>
+        <select id="cctvSelect" class="form-select w-50 mx-auto">
+          <option value="0">CCTV 1 - Malioboro 3</option>
+          <option value="1">CCTV 2 - Malioboro 21</option>
+        </select>
       </div>
 
-      <!-- Statistik CCTV -->
-      <div class="stats-container">
-        <div class="stats-card">
-          <i class="bi bi-camera-video text-light fs-3 me-3"></i>
-          <div class="stats-content">
-            <p class="stats-value">8 Kamera Aktif</p>
-          </div>
-        </div>
-        <div class="stats-card">
-          <i class="bi bi-person-check text-light fs-3 me-3"></i>
-          <div class="stats-content">
-            <p class="stats-value">12 Deteksi Pergerakan</p>
-          </div>
-        </div>
-        
+      <div class="cctv-container mt-4">
+        <div class="cctv-feed">
+          <img id="video-stream" src="{% url 'video_feed' 1 %}" width="100%" alt="CCTV Detection">
         </div>
       </div>
     </div>
@@ -91,23 +96,16 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        var video = document.getElementById('video');
-        var videoSrc = "http://example.com/live/stream.m3u8"; // Ganti dengan URL M3U8
 
-        if (Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                video.play();
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
-            video.addEventListener('loadedmetadata', function() {
-                video.play();
-            });
+    <script>
+        function updateVideoSource() {
+            var selectedIndex = document.getElementById("cctvSelect").value;
+            var selectedSrc = `/video_feed/${selectedIndex}/`;
+            document.getElementById("video-stream").src = selectedSrc;
         }
+
+        document.getElementById("cctvSelect").addEventListener("change", updateVideoSource);
+        updateVideoSource();
     </script>
   </body>
 </html>
