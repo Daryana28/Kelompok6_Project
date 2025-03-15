@@ -1,8 +1,9 @@
 import cv2
-import torch
 import numpy as np
 import os
-import time  # Tambahkan untuk mengatur FPS
+import time
+import subprocess
+import vlc
 from ultralytics import YOLO
 from django.shortcuts import render
 from django.http import StreamingHttpResponse, HttpResponseServerError
@@ -30,24 +31,17 @@ except Exception as e:
 VALID_CLASSES = {3: "helmet", 7: "no-helmet"}
 COLORS = {3: (0, 255, 0), 7: (0, 0, 255)}  # Hijau untuk helmet, Merah untuk no-helmet
 
-# URL CCTV
+# URL CCTV (RTSP)
 CCTV_URLS = [
-    "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_3_Depan_Dispar.stream/chunklist_w1244613808.m3u8",
-    "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_21_Utara_Inna_Malioboro.stream/chunklist_w251511755.m3u8"
+    "rtsps://192.168.199.7:7441/AufmrfOuq3bUkucW?enableSrtp"
 ]
-
-def about_view(request):
-    """
-    Menampilkan halaman about dengan template HTML.
-    """
-    return render(request, 'about/about_view.html')
 
 def detect_objects(frame):
     """
     Jalankan deteksi YOLOv8 dan tambahkan bounding box ke frame.
     """
     print("🔍 YOLO Processing Frame...")  # Debugging
-    results = model(frame, stream=True, conf=0.5)  # Optimasi: confidence score ≥ 50%
+    results = model(frame, stream=True, conf=0.5)  # Confidence score ≥ 50%
 
     for result in results:
         for box in result.boxes:
@@ -71,19 +65,39 @@ def detect_objects(frame):
 
 def cctv_stream(cctv_index):
     """
-    Streaming CCTV dengan bounding box YOLOv8 dan debugging.
+    Streaming CCTV dengan metode fallback (GStreamer → OpenCV FFMPEG → VLC)
     """
     if cctv_index >= len(CCTV_URLS) or cctv_index < 0:
         print("⚠️ Indeks CCTV tidak valid.")
         return None  
 
-    cap = cv2.VideoCapture(CCTV_URLS[cctv_index], cv2.CAP_FFMPEG)
-    cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)  # Optimasi buffer
+    rtsp_url = CCTV_URLS[cctv_index]
 
+    # ✅ Coba GStreamer terlebih dahulu
+    gst_pipeline = f"rtspsrc location={rtsp_url} latency=0 ! decodebin ! videoconvert ! appsink"
+    cap = cv2.VideoCapture(gst_pipeline, cv2.CAP_GSTREAMER)
     if not cap.isOpened():
-        print("❌ Gagal membuka streaming CCTV")
-        return None
+        print("❌ GStreamer gagal, mencoba OpenCV FFMPEG...")
+        cap = cv2.VideoCapture(rtsp_url, cv2.CAP_FFMPEG)
 
+    # ✅ Jika OpenCV FFMPEG gagal, gunakan VLC sebagai alternatif
+    if not cap.isOpened():
+        print("❌ OpenCV gagal, mencoba VLC...")
+        instance = vlc.Instance("--no-xlib")
+        player = instance.media_player_new()
+        media = instance.media_new(rtsp_url)
+        player.set_media(media)
+        player.play()
+
+        while True:
+            frame = player.video_take_snapshot(0, None, 960, 540)
+            if frame is None:
+                print("⚠️ Gagal membaca frame dari VLC")
+                break
+            yield frame
+        return
+
+    # ✅ Jika berhasil, lakukan streaming dengan OpenCV
     try:
         while cap.isOpened():
             ret, frame = cap.read()
@@ -92,9 +106,9 @@ def cctv_stream(cctv_index):
                 break
 
             print("✅ Frame berhasil diambil!")  # Debugging
-            frame = cv2.resize(frame, (960, 540), interpolation=cv2.INTER_CUBIC)  # 🔹 Naikkan resolusi agar lebih jelas
+            frame = cv2.resize(frame, (960, 540), interpolation=cv2.INTER_CUBIC)
             frame = detect_objects(frame)  # Jalankan YOLO
-            _, jpeg = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])  # 🔹 Naikkan kualitas gambar
+            _, jpeg = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
             frame_bytes = jpeg.tobytes()
 
             yield (b'--frame\r\n'
@@ -117,3 +131,9 @@ def cctv_feed(request, cctv_index):
     except Exception as e:
         print(f"❌ ERROR: {e}")
         return HttpResponseServerError("Terjadi kesalahan pada server.")
+
+def about_view(request):
+    """
+    Menampilkan halaman about dengan template HTML.
+    """
+    return render(request, 'about/about_view.html')
