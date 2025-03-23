@@ -78,7 +78,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link text-light nav-hover" href="#">Beranda</a>
+              <a class="nav-link text-light nav-hover" href="{% url 'home'%}"
+                >{{ request.user}} Beranda</a
+              >
             </li>
             <li class="nav-item dropdown">
               <a
@@ -94,7 +96,9 @@
                   >
                 </li>
                 <li>
-                  <a class="dropdown-item text-light nav-hover" href="#"
+                  <a
+                    class="dropdown-item text-light nav-hover"
+                    href="{% url 'logout'%}"
                     >Log Out</a
                   >
                 </li>
@@ -133,8 +137,9 @@
             class="img-container"
             style="border-radius: 20%; overflow: hidden"
           >
-            <a href=""{% url 'about_view' %}">
-            <img src="{% static 'img/camera.jpg' %}"
+            <a href="{% url 'about_view' %}">
+              <img
+                src="{% static 'img/camera.jpg' %}"
                 alt="Camera "
                 style="border-radius: 20%; padding: 10px"
             /></a>
@@ -144,7 +149,6 @@
             <div class="stats-value">🔴 CCTV Live</div>
           </div>
         </div>
-
 
         <!-- Apd -->
         <div class="stats-card">
@@ -184,24 +188,24 @@
           </div>
         </div>
 
-               <!-- Forklif-->
-               <div class="stats-card">
-                <div
-                  class="img-container"
-                  style="border-radius: 20%; overflow: hidden"
-                >
-                  <a href="#"
-                    ><img
-                      src="{% static 'img/forkilf.jpg' %}"
-                      alt="Forklift"
-                      style="border-radius: 20%; padding: 10px"
-                  /></a>
-                </div>
-                <div class="stats-content">
-                  <div></div>
-                  <div class="stats-value">🚜 Forklift Report</div>
-                </div>
-              </div>
+        <!-- Forklif-->
+        <div class="stats-card">
+          <div
+            class="img-container"
+            style="border-radius: 20%; overflow: hidden"
+          >
+            <a href="#"
+              ><img
+                src="{% static 'img/forkilf.jpg' %}"
+                alt="Forklift"
+                style="border-radius: 20%; padding: 10px"
+            /></a>
+          </div>
+          <div class="stats-content">
+            <div></div>
+            <div class="stats-value">🚜 Forklift Report</div>
+          </div>
+        </div>
       </div>
     </div>
 

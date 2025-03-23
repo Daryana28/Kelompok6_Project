@@ -6,10 +6,10 @@ from about import views as about_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', dashbord_view.dashbord_view, name='home'),  # 🔹 Tambahkan Home View
+    path('dashbord/', dashbord_view.dashbord_view, name='home'),  # 🔹 Tambahkan Home View
     path('login/', login_view.login_view, name='login'),
-    path('dashbord/', dashbord_view.dashbord_view, name='dashbord'),
     path('about/', about_view.about_view, name='about_view'),  # 🔹 Perbaiki Nama
     path('about/cctv/', about_view.cctv_feed, name='cctv_feed'),
     path('video_feed/<int:cctv_index>/', about_view.cctv_feed, name='video_feed'),
+    path('logout/', login_view.logout_view, name='logout'),
 ]

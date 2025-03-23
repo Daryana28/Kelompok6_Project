@@ -16,20 +16,17 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" href="{% static 'css/server.css' %}" />
+    <style>
+      .navbar {
+        animation: fadeInDown 1s ease-out;
+      }
+      .nav-hover:hover {
+        color: #a4e450 !important;
+        transition: 0.3s;
+      }
+    </style>
   </head>
-  <style>
-    .cctv-feed {
-      width: 100%;
-      max-width: 800px;
-      margin: auto;
-      position: relative;
-    }
-    .cctv-feed img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  </style>
+
   <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -46,7 +43,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link text-light" href="#">Beranda</a>
+              <a class="nav-link text-light" href="{% url 'home'%}">Beranda</a>
             </li>
             <li class="nav-item dropdown">
               <a
@@ -60,7 +57,9 @@
                   <a class="dropdown-item text-light" href="#">Profile</a>
                 </li>
                 <li>
-                  <a class="dropdown-item text-light" href="#">Log Out</a>
+                  <a class="dropdown-item text-light" href="{% url 'logout'%}"
+                    >Log Out</a
+                  >
                 </li>
               </ul>
             </li>
@@ -84,7 +83,12 @@
 
       <div class="cctv-container mt-4">
         <div class="cctv-feed">
-          <img id="video-stream" src="{% url 'video_feed' 1 %}" width="100%" alt="CCTV Detection">
+          <img
+            id="video-stream"
+            src="{% url 'video_feed' 1 %}"
+            width="100%"
+            alt="CCTV Detection"
+          />
         </div>
       </div>
     </div>
@@ -98,14 +102,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function updateVideoSource() {
-            var selectedIndex = document.getElementById("cctvSelect").value;
-            var selectedSrc = `/video_feed/${selectedIndex}/`;
-            document.getElementById("video-stream").src = selectedSrc;
-        }
+      function updateVideoSource() {
+        var selectedIndex = document.getElementById("cctvSelect").value;
+        var selectedSrc = `/video_feed/${selectedIndex}/`;
+        document.getElementById("video-stream").src = selectedSrc;
+      }
 
-        document.getElementById("cctvSelect").addEventListener("change", updateVideoSource);
-        updateVideoSource();
+      document
+        .getElementById("cctvSelect")
+        .addEventListener("change", updateVideoSource);
+      updateVideoSource();
     </script>
   </body>
 </html>

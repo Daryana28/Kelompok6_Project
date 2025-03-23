@@ -1,19 +1,39 @@
 body {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: auto;
   height: 100vh;
-  background-color: #17191a;
-  background-size: 2100px;
-  background-position: center;
+
+  flex-direction: column; /* Agar elemen tersusun ke bawah */
 }
+.login-page {
+  background: url("/static/img/bg-login.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.container {
+  text-align: center;
+  margin-bottom: 20px; /* Memberi jarak dengan form */
+  margin-left: -280px; /* Memberi jarak dengan form */
+}
+
+h1 {
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+}
+
 .login-form {
   background: white;
   padding: 2rem;
-  border-radius: 10px;
+  margin-left: 190px; /* Memberi jarak dengan form */
+  border-radius: 25px;
   box-shadow: 0px 4px 10px #f0f8ff;
   animation: fadeIn 0.5s ease-in-out;
+  width: 100%;
+  max-width: 400px; /* Batas maksimal lebar form */
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -23,4 +43,50 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+/* Animasi saat input difokuskan */
+input[type="email"],
+input[type="password"] {
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Efek saat input mendapatkan fokus */
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff; /* Warna biru saat fokus */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+  transform: scale(1.05); /* Efek zoom ringan */
+  outline: none;
+}
+.btn-primary {
+  border-radius: calc(infinity * 1px);
+  background-color: var(--color-violet-500);
+  padding-inline: --spacing(5);
+  padding-block: --spacing(2);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+  box-shadow: var(--shadow-md);
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--color-violet-700);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.success-message {
+  animation: fadeIn 1s ease-in-out;
+  color: green;
+  font-weight: bold;
 }
