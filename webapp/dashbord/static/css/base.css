@@ -67,6 +67,7 @@
   box-shadow: 0 4px 10px #a4e450;
   min-width: 200px;
   transition: transform 0.3s ease-in-out;
+  
 }
 /* Efek Hover untuk Card */
 .stats-card:hover {

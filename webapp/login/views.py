@@ -1,4 +1,3 @@
-# views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm
@@ -15,16 +14,19 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')  # Tambahkan parameter
+            return redirect('dashbord')  
+        
         return render(request, 'login/login_view.html', {'form': form, 'error': 'Invalid credentials'})
     
-    # Cek jika login berhasil dari parameter URL
-    login_success = request.GET.get('home')
+    login_success = request.GET.get('dashbord')
     return render(request, 'login/login_view.html', {'form': form, 'login_success': login_success})
+
 
 @login_required(login_url=settings.LOGIN_URL)
 def home(request):
     return render(request, 'dashbord/dashbord_view.html')
+
+
 def logout_view(request):
     logout(request)
     return redirect('login')

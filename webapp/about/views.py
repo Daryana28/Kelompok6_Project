@@ -1,8 +1,7 @@
 import cv2
 import torch
-import numpy as np
 import os
-import time  # Tambahkan untuk mengatur FPS
+import time
 from ultralytics import YOLO
 from django.shortcuts import render
 from django.http import StreamingHttpResponse, HttpResponseServerError
@@ -16,8 +15,9 @@ if not os.path.exists(MODEL_PATH):
     raise FileNotFoundError(f"⚠️ Model tidak ditemukan di {MODEL_PATH}")
 
 try:
-    # Load model YOLOv8
-    model = YOLO(MODEL_PATH)
+    # Load model YOLOv8 dengan perangkat GPU jika tersedia
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model = YOLO(MODEL_PATH).to(device)
     print("✅ Model YOLOv8 berhasil dimuat.")
     
     # Dapatkan daftar class dalam model
@@ -30,10 +30,10 @@ except Exception as e:
 VALID_CLASSES = {3: "helmet", 7: "no-helmet"}
 COLORS = {3: (0, 255, 0), 7: (0, 0, 255)}  # Hijau untuk helmet, Merah untuk no-helmet
 
-# URL CCTV
-CCTV_URLS = [
-    "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_3_Depan_Dispar.stream/chunklist_w1244613808.m3u8",
-    "https://cctvjss.jogjakota.go.id/malioboro/Malioboro_21_Utara_Inna_Malioboro.stream/chunklist_w251511755.m3u8"
+# Update to dynamically find video files
+VIDEO_FILES = [
+    os.path.join(BASE_DIR, 'about', 'static', 'videos', 'motor.mp4'),
+    os.path.join(BASE_DIR, 'about', 'static', 'videos', 'neww.mp4')
 ]
 
 def about_view(request):
@@ -68,50 +68,62 @@ def detect_objects(frame):
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
                 cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
     return frame
-
-def cctv_stream(cctv_index):
+def video_stream(video_index):
     """
-    Streaming CCTV dengan bounding box YOLOv8 dan debugging.
+    Streaming video lokal dengan bounding box YOLOv8 dan debugging.
     """
-    if cctv_index >= len(CCTV_URLS) or cctv_index < 0:
-        print("⚠️ Indeks CCTV tidak valid.")
-        return None  
+    if video_index >= len(VIDEO_FILES) or video_index < 0:
+        print(f"⚠️ Indeks video tidak valid: {video_index}")
+        return None  # Pastikan video index yang diteruskan valid
 
-    cap = cv2.VideoCapture(CCTV_URLS[cctv_index], cv2.CAP_FFMPEG)
-    cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)  # Optimasi buffer
+    # Menampilkan video yang dipilih
+    print(f"📽️ Memilih video dengan index: {video_index} - {VIDEO_FILES[video_index]}")
+
+    cap = cv2.VideoCapture(VIDEO_FILES[video_index])
 
     if not cap.isOpened():
-        print("❌ Gagal membuka streaming CCTV")
+        print("❌ Gagal membuka video lokal")
         return None
 
     try:
+        frame_buffer = []  # Buffer untuk menyimpan frame
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
-                print("⚠️ Gagal membaca frame dari CCTV")
+                print("⚠️ Gagal membaca frame dari video")
                 break
 
             print("✅ Frame berhasil diambil!")  # Debugging
-            frame = cv2.resize(frame, (960, 540), interpolation=cv2.INTER_CUBIC)  # 🔹 Naikkan resolusi agar lebih jelas
+            
+            # Mengatur ukuran dan kualitas frame
+            frame = cv2.resize(frame, (1280, 720), interpolation=cv2.INTER_CUBIC)  # Resolusi tinggi
+            
+            # Menjalankan deteksi objek YOLO
             frame = detect_objects(frame)  # Jalankan YOLO
-            _, jpeg = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])  # 🔹 Naikkan kualitas gambar
+            
+            # Mengompresi frame menjadi JPEG dengan kualitas yang lebih tinggi
+            _, jpeg = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])  # Kualitas gambar
             frame_bytes = jpeg.tobytes()
 
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+            # Menyimpan frame dalam buffer untuk mempermudah aliran video
+            frame_buffer.append(frame_bytes)
 
-            time.sleep(0.05)  # Batasi ke ~20 FPS untuk mengurangi lag
+            if len(frame_buffer) > 3:  # Batasi ukuran buffer hanya 3 frame
+                # Kirimkan frame pertama dari buffer
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame_buffer.pop(0) + b'\r\n')
+
     finally:
         cap.release()
 
-def cctv_feed(request, cctv_index):
+def video_feed(request, video_index):
     """
-    Endpoint untuk streaming video dengan deteksi objek YOLOv8.
+    Endpoint untuk streaming video lokal dengan deteksi objek YOLOv8.
     """
     try:
-        stream = cctv_stream(int(cctv_index))
+        stream = video_stream(int(video_index))
         if stream is None:
-            return HttpResponseServerError("Gagal membuka CCTV stream.")
+            return HttpResponseServerError("Gagal membuka video lokal.")
         
         return StreamingHttpResponse(stream, content_type='multipart/x-mixed-replace; boundary=frame')
     except Exception as e:
