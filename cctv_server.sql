@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2025 at 03:41 PM
+-- Generation Time: Apr 22, 2025 at 05:35 PM
 -- Server version: 11.7.2-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `cctv_server`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `apd_report_pelanggaran`
+--
+
+CREATE TABLE `apd_report_pelanggaran` (
+  `id` bigint(20) NOT NULL,
+  `waktu` datetime(6) NOT NULL,
+  `lokasi` varchar(255) NOT NULL,
+  `jenis_pelanggaran` varchar(100) NOT NULL,
+  `tindakan` varchar(100) NOT NULL,
+  `confidence` double DEFAULT NULL,
+  `screenshot_path` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `apd_report_pelanggaran`
+--
+
+INSERT INTO `apd_report_pelanggaran` (`id`, `waktu`, `lokasi`, `jenis_pelanggaran`, `tindakan`, `confidence`, `screenshot_path`) VALUES
+(6, '2025-04-22 14:35:14.950267', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.6137546300888062, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213514.jpg'),
+(7, '2025-04-22 14:36:17.500697', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.5056233406066895, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213617.jpg'),
+(8, '2025-04-22 14:36:23.366008', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.73353511095047, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213623.jpg');
 
 -- --------------------------------------------------------
 
@@ -85,7 +110,11 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (21, 'Can add session', 6, 'add_session'),
 (22, 'Can change session', 6, 'change_session'),
 (23, 'Can delete session', 6, 'delete_session'),
-(24, 'Can view session', 6, 'view_session');
+(24, 'Can view session', 6, 'view_session'),
+(25, 'Can add pelanggaran', 7, 'add_pelanggaran'),
+(26, 'Can change pelanggaran', 7, 'change_pelanggaran'),
+(27, 'Can delete pelanggaran', 7, 'delete_pelanggaran'),
+(28, 'Can view pelanggaran', 7, 'view_pelanggaran');
 
 -- --------------------------------------------------------
 
@@ -112,7 +141,8 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$870000$KaaDJ2mnLWzCq2p7tiFd4k$lLuwtEcqhRUF+qihBNKjCdYp8QFVJAeVlOCRznFnJWw=', '2025-03-23 06:47:48.313543', 1, 'admin1', '', '', 'admin1@gmail.com', 1, 1, '2025-03-23 00:24:12.247495');
+(1, 'pbkdf2_sha256$870000$KaaDJ2mnLWzCq2p7tiFd4k$lLuwtEcqhRUF+qihBNKjCdYp8QFVJAeVlOCRznFnJWw=', '2025-04-22 15:28:39.750066', 1, 'admin1', '', '', 'admin1@gmail.com', 1, 1, '2025-03-23 00:24:12.247495'),
+(2, 'pbkdf2_sha256$870000$YqBLikAvUEI0iaRHGDduoC$LXqRBHA0sQkd+qtrnPtBP4Th9ETeOJYVftFJChR4BsE=', '2025-04-01 18:11:09.000000', 0, 'K3', 'Hari', '', 'Hari@gmail.com', 1, 1, '2025-04-01 17:18:54.000000');
 
 -- --------------------------------------------------------
 
@@ -155,6 +185,19 @@ CREATE TABLE `django_admin_log` (
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `django_admin_log`
+--
+
+INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`, `action_flag`, `change_message`, `content_type_id`, `user_id`) VALUES
+(1, '2025-04-01 17:18:54.645309', '2', 'K3', 1, '[{\"added\": {}}]', 4, 1),
+(2, '2025-04-01 17:19:35.668282', '2', 'K3', 2, '[{\"changed\": {\"fields\": [\"First name\", \"Email address\", \"User permissions\"]}}]', 4, 1),
+(3, '2025-04-01 18:09:25.362629', '2', 'K3', 2, '[{\"changed\": {\"fields\": [\"Staff status\"]}}]', 4, 1),
+(4, '2025-04-01 18:10:06.290187', '2', 'K3', 2, '[]', 4, 1),
+(5, '2025-04-01 18:10:57.798025', '2', 'K3', 2, '[{\"changed\": {\"fields\": [\"User permissions\"]}}]', 4, 1),
+(6, '2025-04-21 14:06:09.486052', '2', 'K3', 2, '[{\"changed\": {\"fields\": [\"password\"]}}]', 4, 1),
+(7, '2025-04-21 14:06:49.893326', '2', 'K3', 2, '[]', 4, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -173,6 +216,7 @@ CREATE TABLE `django_content_type` (
 
 INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (1, 'admin', 'logentry'),
+(7, 'apd_report', 'pelanggaran'),
 (3, 'auth', 'group'),
 (2, 'auth', 'permission'),
 (4, 'auth', 'user'),
@@ -214,7 +258,10 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (15, 'auth', '0010_alter_group_name_max_length', '2025-03-23 00:19:46.125504'),
 (16, 'auth', '0011_update_proxy_permissions', '2025-03-23 00:19:46.140369'),
 (17, 'auth', '0012_alter_user_first_name_max_length', '2025-03-23 00:19:46.190924'),
-(18, 'sessions', '0001_initial', '2025-03-23 00:19:46.250506');
+(18, 'sessions', '0001_initial', '2025-03-23 00:19:46.250506'),
+(19, 'apd_report', '0001_initial', '2025-04-14 13:41:53.499103'),
+(20, 'apd_report', '0002_alter_pelanggaran_jenis_pelanggaran_and_more', '2025-04-17 17:10:28.221617'),
+(21, 'apd_report', '0002_pelanggaran_confidence_pelanggaran_screenshot_path_and_more', '2025-04-22 13:27:34.599529');
 
 -- --------------------------------------------------------
 
@@ -233,11 +280,19 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('w8sj216ojajs9gz9msj8q73u8gu1xtv1', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1twA4w:7K3IOmv_UHjju600MJ5RNEF3glXjZ105boXapOEmxcw', '2025-04-06 01:24:42.433475');
+('g5bcdy9djsljrgt1mgksuhmvmnmb893n', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1tzg5E:HYzudpMkzuV4CiUC_B0BaRGjMmexvlLnVIIEsLsTpWQ', '2025-04-15 18:11:32.540551'),
+('ha1vg5d5wdzitklumpzakijafxm4ci3k', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1u7EhJ:UAjT6o4RLmzdbt5bbxZw1B9CJYH99y36VMWH1HolBko', '2025-05-06 14:34:05.299097'),
+('moniyvyc27d4ld543e7qieyt64qw056y', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1u7FY7:qm1cROY8vPEORf_ZOw3Cv9B6wg-kW6qbokLEa6JxK_Q', '2025-05-06 15:28:39.775517');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `apd_report_pelanggaran`
+--
+ALTER TABLE `apd_report_pelanggaran`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `auth_group`
@@ -317,6 +372,12 @@ ALTER TABLE `django_session`
 --
 
 --
+-- AUTO_INCREMENT for table `apd_report_pelanggaran`
+--
+ALTER TABLE `apd_report_pelanggaran`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `auth_group`
 --
 ALTER TABLE `auth_group`
@@ -332,13 +393,13 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `auth_user_groups`
@@ -350,25 +411,25 @@ ALTER TABLE `auth_user_groups`
 -- AUTO_INCREMENT for table `auth_user_user_permissions`
 --
 ALTER TABLE `auth_user_user_permissions`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables
