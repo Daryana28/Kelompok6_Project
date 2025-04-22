@@ -193,3 +193,7 @@ def video_feed(request, video_index):
     except Exception as e:
         print(f"❌ ERROR: {e}")
         return HttpResponseServerError("Terjadi kesalahan pada server.")
+    
+
+
+    
