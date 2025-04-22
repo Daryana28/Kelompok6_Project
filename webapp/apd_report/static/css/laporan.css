@@ -1,0 +1,255 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body styling */
+body {
+  background-color: #f4f7fa;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Pastikan body memenuhi tinggi layar */
+}
+
+/* Main content */
+main {
+  flex: 1; /* Membuat konten utama mengisi ruang antara navbar dan footer */
+  padding: 20px;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: #2c3e50;
+  padding: 15px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .logo {
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar .nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1em;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-links li a:hover {
+  color: #3498db;
+}
+
+/* Hamburger menu for mobile */
+.navbar .hamburger {
+  display: none;
+  color: #fff;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+/* Header styling */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-size: 2.5em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Table container */
+table {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table header */
+thead {
+  background-color: #3498db;
+  color: #fff;
+}
+
+th {
+  padding: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+}
+
+/* Table body */
+tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e6f0fa;
+}
+
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95em;
+}
+
+/* Screenshot image styling */
+td img {
+  max-width: 100px;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: transform 0.2s ease;
+  cursor: pointer; /* Menunjukkan gambar dapat diklik */
+}
+
+td img:hover {
+  transform: scale(1.05);
+}
+
+/* Empty state */
+td[colspan="6"] {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 20px;
+}
+
+/* Modal untuk memperbesar gambar */
+.modal {
+  display: none; /* Sembunyikan modal secara default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Latar belakang gelap */
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #ccc;
+}
+
+/* Footer styling */
+.footer {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 15px 20px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.footer a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: #fff;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  table {
+    width: 100%;
+  }
+
+  th,
+  td {
+    font-size: 0.85em;
+    padding: 10px;
+  }
+
+  td img {
+    max-width: 80px;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+  }
+
+  /* Navbar responsive */
+  .navbar .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50;
+    padding: 10px 0;
+  }
+
+  .navbar .nav-links.active {
+    display: flex;
+  }
+
+  .navbar .nav-links li {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .navbar .hamburger {
+    display: block;
+  }
+}

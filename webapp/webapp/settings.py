@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -86,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cctv_server',
         'USER': 'root',      # Ganti dengan username MySQL Anda
-        'PASSWORD': 'mysql123',   # Ganti dengan kata sandi MySQL Anda
+        'PASSWORD': '',   # Ganti dengan kata sandi MySQL Anda
         'HOST': 'localhost',        # Atau alamat server MySQL jika tidak lokal
         'PORT': '3306',             # Port MySQL (default 3306)
 
@@ -134,6 +135,13 @@ LOGIN_URL ='/login/'
 
 LOGOUT_REDIRECT_URL = '/'
 
+
+# webapp/settings.py
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    
+    os.path.join(BASE_DIR, 'apd_report/static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
