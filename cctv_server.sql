@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 05:35 PM
+-- Generation Time: May 03, 2025 at 05:42 PM
 -- Server version: 11.7.2-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,9 +42,14 @@ CREATE TABLE `apd_report_pelanggaran` (
 --
 
 INSERT INTO `apd_report_pelanggaran` (`id`, `waktu`, `lokasi`, `jenis_pelanggaran`, `tindakan`, `confidence`, `screenshot_path`) VALUES
-(6, '2025-04-22 14:35:14.950267', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.6137546300888062, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213514.jpg'),
-(7, '2025-04-22 14:36:17.500697', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.5056233406066895, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213617.jpg'),
-(8, '2025-04-22 14:36:23.366008', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.73353511095047, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213623.jpg');
+(6, '2024-05-15 14:36:59.260927', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.6137546300888062, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213514.jpg'),
+(7, '2024-05-15 14:36:59.260927', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.5056233406066895, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213617.jpg'),
+(8, '2025-04-22 14:36:23.366008', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.73353511095047, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250422-213623.jpg'),
+(10, '2025-05-01 12:25:53.429425', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.6137546300888062, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250501-192553.jpg'),
+(11, '2025-05-01 12:26:40.258433', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.5056233406066895, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250501-192640.jpg'),
+(12, '2025-05-01 12:26:45.295397', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.6217843294143677, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250501-192645.jpg'),
+(13, '2025-05-01 12:27:15.962160', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.5721391439437866, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250501-192715.jpg'),
+(14, '2025-05-01 12:27:58.586594', 'Lokasi Tidak Diketahui', 'No Helmet', 'Peringatan', 0.5576567649841309, 'C:\\myapps\\webapp\\apd_report\\static\\screenshots\\no_helmet_furthest_20250501-192758.jpg');
 
 -- --------------------------------------------------------
 
@@ -141,7 +146,7 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$870000$KaaDJ2mnLWzCq2p7tiFd4k$lLuwtEcqhRUF+qihBNKjCdYp8QFVJAeVlOCRznFnJWw=', '2025-04-22 15:28:39.750066', 1, 'admin1', '', '', 'admin1@gmail.com', 1, 1, '2025-03-23 00:24:12.247495'),
+(1, 'pbkdf2_sha256$870000$KaaDJ2mnLWzCq2p7tiFd4k$lLuwtEcqhRUF+qihBNKjCdYp8QFVJAeVlOCRznFnJWw=', '2025-05-01 14:11:14.144482', 1, 'admin1', 'Petugas', 'K3', 'admin1@gmail.com', 1, 1, '2025-03-23 00:24:12.000000'),
 (2, 'pbkdf2_sha256$870000$YqBLikAvUEI0iaRHGDduoC$LXqRBHA0sQkd+qtrnPtBP4Th9ETeOJYVftFJChR4BsE=', '2025-04-01 18:11:09.000000', 0, 'K3', 'Hari', '', 'Hari@gmail.com', 1, 1, '2025-04-01 17:18:54.000000');
 
 -- --------------------------------------------------------
@@ -196,7 +201,8 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (4, '2025-04-01 18:10:06.290187', '2', 'K3', 2, '[]', 4, 1),
 (5, '2025-04-01 18:10:57.798025', '2', 'K3', 2, '[{\"changed\": {\"fields\": [\"User permissions\"]}}]', 4, 1),
 (6, '2025-04-21 14:06:09.486052', '2', 'K3', 2, '[{\"changed\": {\"fields\": [\"password\"]}}]', 4, 1),
-(7, '2025-04-21 14:06:49.893326', '2', 'K3', 2, '[]', 4, 1);
+(7, '2025-04-21 14:06:49.893326', '2', 'K3', 2, '[]', 4, 1),
+(8, '2025-05-01 11:20:47.892826', '1', 'admin1', 2, '[{\"changed\": {\"fields\": [\"First name\", \"Last name\"]}}]', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -280,9 +286,10 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+('c2asglzu4sch22btmm4z6xfmq2pyb3on', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1uAUd8:p8kbeX5di1XpJNCQh015J3Wd-uHrO7LcddgKvQqQcE8', '2025-05-15 14:11:14.153482'),
+('dqkg1i2y5mapzeg58ehez2ejkrxbfd7k', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1uATEq:wJg71Z-Z23_-WxHfg0PfwRWeg_ONFCE-fSgMbVruyjE', '2025-05-15 12:42:04.708170'),
 ('g5bcdy9djsljrgt1mgksuhmvmnmb893n', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1tzg5E:HYzudpMkzuV4CiUC_B0BaRGjMmexvlLnVIIEsLsTpWQ', '2025-04-15 18:11:32.540551'),
-('ha1vg5d5wdzitklumpzakijafxm4ci3k', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1u7EhJ:UAjT6o4RLmzdbt5bbxZw1B9CJYH99y36VMWH1HolBko', '2025-05-06 14:34:05.299097'),
-('moniyvyc27d4ld543e7qieyt64qw056y', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1u7FY7:qm1cROY8vPEORf_ZOw3Cv9B6wg-kW6qbokLEa6JxK_Q', '2025-05-06 15:28:39.775517');
+('moniyvyc27d4ld543e7qieyt64qw056y', '.eJxVjDsOwjAQBe_iGlnyZ_2hpOcM1nq9xgHkSHFSIe4OkVJA-2bmvUTCbW1pG7ykqYizUOL0u2WkB_cdlDv22yxp7usyZbkr8qBDXufCz8vh_h00HO1bR1KWNVmulhGC0x4MUC1QHVfMEJ2GCAVK1cqQjtEEpyzZgIE8Vy_eH-2YN_k:1u8LcT:cn9siCNRIxDrTHjh5b5BnNsB7fYQpRgYFdFQY0pih6g', '2025-05-09 16:09:41.085695');
 
 --
 -- Indexes for dumped tables
@@ -375,7 +382,7 @@ ALTER TABLE `django_session`
 -- AUTO_INCREMENT for table `apd_report_pelanggaran`
 --
 ALTER TABLE `apd_report_pelanggaran`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `auth_group`
@@ -417,7 +424,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `django_content_type`
