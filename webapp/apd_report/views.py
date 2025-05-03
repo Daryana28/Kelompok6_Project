@@ -6,3 +6,5 @@ def laporan(request):
     pelanggaran = Pelanggaran.objects.all().order_by('-waktu')
     print("Data pelanggaran:", pelanggaran)  # Debugging untuk memastikan data ada
     return render(request, 'apd_report/laporan.html', {'pelanggaran': pelanggaran})
+
+

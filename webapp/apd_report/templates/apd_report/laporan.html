@@ -1,115 +1,711 @@
-<!-- apd_report/templates/apd_report/laporan.html -->
 {% load static %}
 <!DOCTYPE html>
 <html>
   <head>
     <title>Laporan Pelanggaran</title>
+    <!-- Font Awesome untuk ikon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS Utama untuk Semua Elemen -->
     <link rel="stylesheet" href="{% static 'css/laporan.css' %}" />
+    <!-- jsPDF untuk menghasilkan PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+      /* Reset Default Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      /* Body dan Layout Utama */
+      html,
+      body {
+        height: 100%;
+        background: #1c2526;
+        color: #e0e0e0;
+        font-size: 14px;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 150px;
+        background: #252f30;
+        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 24px;
+        color: #ffd700;
+        margin-bottom: 40px;
+      }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .menu-item {
+        color: #a0a0a0;
+        font-size: 20px;
+        transition: color 0.3s ease;
+      }
+
+      .menu-item:hover,
+      .menu-item.active {
+        color: #ffd700;
+      }
+
+      /* Main Content */
+      main {
+        flex: 1;
+        padding: 20px;
+        margin-left: 150px; /* Sesuaikan dengan lebar sidebar */
+      }
+
+      h1 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #f5f5f5;
+      }
+
+      /* Filter Container */
+      .filter-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .filter-container label {
+        font-size: 16px;
+        color: #f5f5f5;
+      }
+
+      .filter-container select {
+        background-color: #252f30;
+        color: #f5f5f5;
+        border: 1px solid #444;
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+      }
+
+      .filter-container select:focus {
+        border-color: #ffd700;
+        outline: none;
+      }
+
+      .download-btn {
+        padding: 8px 15px;
+        background: #ffd700;
+        color: #1c2526;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .download-btn:hover {
+        background: #ff8c00;
+      }
+
+      /* Tabel */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #252f30;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #3a4445;
+      }
+
+      th {
+        background: #2a3435;
+        font-weight: 600;
+        color: #e0e0e0;
+      }
+
+      td {
+        color: #a0a0a0;
+      }
+
+      .clickable-row {
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .clickable-row:hover {
+        background: #2a3435;
+      }
+
+      .screenshot-img {
+        width: 100px;
+        height: auto;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+      }
+
+      .screenshot-img:hover {
+        transform: scale(1.05);
+      }
+
+      /* Modal (Untuk Gambar dan Detail) */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .image-modal .modal-content {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+      }
+
+      .detail-modal .modal-content {
+        background: #252f30;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90%;
+        overflow-y: auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .detail-modal h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #f5f5f5;
+      }
+
+      .detail-body p {
+        margin-bottom: 10px;
+        color: #e0e0e0;
+      }
+
+      .detail-body strong {
+        color: #ffd700;
+      }
+
+      .detail-screenshot {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: #ffd700;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .close-btn:hover {
+        color: #ff8c00;
+      }
+
+      .print-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #ffd700;
+        color: #1c2526;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .print-btn:hover {
+        background: #ff8c00;
+      }
+
+      /* Footer */
+      .footer {
+        background-color: #212529;
+        padding: 1rem 0;
+        text-align: center;
+        color: #ccc;
+        font-size: 14px;
+        margin-top: auto;
+      }
+
+      .footer a {
+        color: #ffd700;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* Responsivitas */
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 50px;
+        }
+
+        main {
+          margin-left: 50px;
+          padding: 15px;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+
+        .filter-container {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .filter-container select {
+          width: 100%;
+        }
+
+        .download-btn {
+          width: 100%;
+          text-align: center;
+        }
+
+        table {
+          font-size: 12px;
+        }
+
+        th,
+        td {
+          padding: 10px;
+        }
+
+        .screenshot-img {
+          width: 80px;
+        }
+
+        .detail-modal .modal-content {
+          width: 95%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+
+        .footer {
+          font-size: 12px;
+        }
+      }
+
+      /* Aturan untuk Print */
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+
+        .detail-modal,
+        .detail-modal * {
+          visibility: visible;
+        }
+
+        .detail-modal {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: auto;
+          background: none;
+        }
+
+        .detail-modal .modal-content {
+          background: #fff;
+          color: #000;
+          box-shadow: none;
+          width: 100%;
+          max-width: none;
+        }
+
+        .detail-modal h2,
+        .detail-body p,
+        .detail-body strong {
+          color: #000;
+        }
+
+        .close-btn,
+        .print-btn {
+          display: none;
+        }
+
+        .detail-screenshot {
+          max-width: 500px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-      <div class="container">
-        <a href="{% url 'about_view' %}" class="logo"
-          >Sistem Deteksi Pelanggaran</a
-        >
-        <ul class="nav-links">
-          <li><a href="{% url 'dashbord' %}">Beranda</a></li>
-          <li><a href="{% url 'apd_report' %}">Laporan</a></li>
-        </ul>
-        <span class="hamburger">☰</span>
+    <div class="dashboard-container">
+      <div class="sidebar">
+        <div class="logo">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="sidebar-menu">
+          <a href="{% url 'dashbord' %}" class="menu-item">Dashboard</a>
+          <a href="{% url 'about_view' %}" class="menu-item">CCTV</a>
+          <a href="{% url 'apd_report' %}" class="menu-item active"
+            >APD Report</a
+          >
+          <a href="{% url 'logout' %}" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
       </div>
-    </nav>
-
-    <!-- Main content -->
-    <main>
-      <h1>Laporan Pelanggaran</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Waktu</th>
-            <th>Lokasi</th>
-            <th>Jenis Pelanggaran</th>
-            <th>Confidence</th>
-            <th>Tindakan</th>
-            <th>Screenshot</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in pelanggaran %}
-          <tr>
-            <td>{{ item.waktu }}</td>
-            <td>{{ item.cctv.lokasi|default:"Lokasi Tidak Diketahui" }}</td>
-            <td>{{ item.jenis_pelanggaran }}</td>
-            <td>{{ item.confidence }}</td>
-            <td>{{ item.tindakan }}</td>
-            <td>
-              {% if item.screenshot_path %}
-              <img
-                src="{% static 'screenshots/' %}{{ item.screenshot_path }}"
-                alt="Screenshot"
-                class="screenshot-img"
-              />
-              {% else %} Tidak ada screenshot {% endif %}
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="6">Tidak ada pelanggaran.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </main>
+      <!-- Main content -->
+      <main>
+        <h1>Laporan Pelanggaran</h1>
+        <div class="filter-container">
+          <label for="periodFilter">Filter Periode:</label>
+          <select id="periodFilter">
+            <option value="all">Semua</option>
+            <option value="weekly">Per Minggu</option>
+            <option value="monthly">Per Bulan</option>
+          </select>
+          <button id="downloadBtn" class="download-btn">Unduh PDF</button>
+        </div>
+        <table id="pelanggaranTable">
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Lokasi</th>
+              <th>Jenis Pelanggaran</th>
+              <th>Confidence</th>
+              <th>Tindakan</th>
+              <th>Screenshot</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in pelanggaran %}
+            <tr
+              class="clickable-row"
+              data-waktu="{{ item.waktu }}"
+              data-lokasi="{{ item.cctv.lokasi|default:'Lokasi Tidak Diketahui' }}"
+              data-jenis="{{ item.jenis_pelanggaran }}"
+              data-confidence="{{ item.confidence }}"
+              data-tindakan="{{ item.tindakan }}"
+              data-screenshot="{% if item.screenshot_path %}{% static 'screenshots/' %}{{ item.screenshot_path }}{% else %}Tidak ada screenshot{% endif %}"
+            >
+              <td>{{ item.waktu }}</td>
+              <td>{{ item.cctv.lokasi|default:"Lokasi Tidak Diketahui" }}</td>
+              <td>{{ item.jenis_pelanggaran }}</td>
+              <td>{{ item.confidence }}</td>
+              <td>{{ item.tindakan }}</td>
+              <td>
+                {% if item.screenshot_path %}
+                <img
+                  src="{% static 'screenshots/' %}{{ item.screenshot_path }}"
+                  alt="Screenshot"
+                  class="screenshot-img"
+                />
+                {% else %} Tidak ada screenshot {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6">Tidak ada pelanggaran.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </main>
+    </div>
 
     <!-- Modal untuk memperbesar gambar -->
-    <div id="imageModal" class="modal">
+    <div id="imageModal" class="modal image-modal">
       <span class="close-btn">×</span>
       <img class="modal-content" id="modalImage" />
     </div>
 
+    <!-- Modal untuk detail pelanggaran -->
+    <div id="detailModal" class="modal detail-modal">
+      <div class="modal-content detail-content">
+        <span class="close-btn">×</span>
+        <h2>Detail Pelanggaran</h2>
+        <div class="detail-body">
+          <p><strong>Waktu:</strong> <span id="detailWaktu"></span></p>
+          <p><strong>Lokasi:</strong> <span id="detailLokasi"></span></p>
+          <p>
+            <strong>Jenis Pelanggaran:</strong> <span id="detailJenis"></span>
+          </p>
+          <p>
+            <strong>Confidence:</strong> <span id="detailConfidence"></span>
+          </p>
+          <p><strong>Tindakan:</strong> <span id="detailTindakan"></span></p>
+          <p><strong>Screenshot:</strong></p>
+          <div id="detailScreenshot"></div>
+        </div>
+        <button id="printBtn" class="print-btn">Print</button>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
-      <p>&copy; 2025 Sistem Deteksi Pelanggaran. All Rights Reserved.</p>
+      <p>© 2025 Sistem Deteksi Pelanggaran. All Rights Reserved.</p>
       <p>
         Kontak: <a href="mailto:support@deteksi.com">support@deteksi.com</a>
       </p>
     </footer>
 
     <script>
-      // Ambil semua gambar screenshot
-      const images = document.querySelectorAll(".screenshot-img");
-      const modal = document.getElementById("imageModal");
-      const modalImg = document.getElementById("modalImage");
-      const closeBtn = document.querySelector(".close-btn");
+      // Ambil elemen
+      const periodFilter = document.getElementById("periodFilter");
+      const table = document.getElementById("pelanggaranTable");
+      const rows = table.querySelectorAll("tbody tr:not(:last-child)"); // Kecualikan baris "Tidak ada pelanggaran"
+      const downloadBtn = document.getElementById("downloadBtn");
 
-      // Tambahkan event listener untuk setiap gambar
+      // Fungsi untuk memfilter data berdasarkan periode
+      function filterTable() {
+        const period = periodFilter.value;
+        const today = new Date();
+
+        rows.forEach((row) => {
+          const waktuText = row.dataset.waktu;
+          if (!waktuText) {
+            row.style.display = "table-row"; // Tampilkan baris "Tidak ada pelanggaran"
+            return;
+          }
+
+          const waktu = new Date(waktuText);
+          let shouldDisplay = false;
+
+          if (period === "all") {
+            shouldDisplay = true;
+          } else if (period === "weekly") {
+            const oneWeekAgo = new Date(today);
+            oneWeekAgo.setDate(today.getDate() - 7);
+            shouldDisplay = waktu >= oneWeekAgo && waktu <= today;
+          } else if (period === "monthly") {
+            const oneMonthAgo = new Date(today);
+            oneMonthAgo.setMonth(today.getMonth() - 1);
+            shouldDisplay = waktu >= oneMonthAgo && waktu <= today;
+          }
+
+          row.style.display = shouldDisplay ? "table-row" : "none";
+        });
+
+        // Tampilkan baris "Tidak ada pelanggaran" jika tidak ada data yang sesuai
+        const visibleRows = Array.from(rows).filter(
+          (row) => row.style.display !== "none"
+        );
+        const emptyRow = table.querySelector("tbody tr:last-child");
+        emptyRow.style.display = visibleRows.length > 0 ? "none" : "table-row";
+      }
+
+      // Event listener untuk filter
+      periodFilter.addEventListener("change", filterTable);
+
+      // Fungsi untuk mengunduh PDF
+      downloadBtn.addEventListener("click", function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Judul
+        doc.setFontSize(16);
+        doc.text("Laporan Pelanggaran", 10, 10);
+        doc.setFontSize(12);
+        doc.text(
+          `Periode: ${periodFilter.options[periodFilter.selectedIndex].text}`,
+          10,
+          20
+        );
+
+        // Ambil data tabel yang terlihat
+        const tableData = [];
+        const headers = [
+          "Waktu",
+          "Lokasi",
+          "Jenis Pelanggaran",
+          "Confidence",
+          "Tindakan",
+          "Screenshot",
+        ];
+        tableData.push(headers);
+
+        const visibleRows = Array.from(rows).filter(
+          (row) => row.style.display !== "none"
+        );
+        visibleRows.forEach((row) => {
+          const rowData = [
+            row.dataset.waktu,
+            row.dataset.lokasi,
+            row.dataset.jenis,
+            row.dataset.confidence,
+            row.dataset.tindakan,
+            row.dataset.screenshot === "Tidak ada screenshot"
+              ? "Tidak ada"
+              : "Ada",
+          ];
+          tableData.push(rowData);
+        });
+
+        // Tambahkan tabel ke PDF
+        doc.autoTable({
+          head: [headers],
+          body: tableData.slice(1),
+          startY: 30,
+          styles: { fontSize: 10, cellPadding: 2 },
+          headStyles: { fillColor: [42, 52, 53], textColor: [224, 224, 224] },
+          bodyStyles: { textColor: [160, 160, 160] },
+        });
+
+        // Simpan PDF
+        doc.save(
+          `Laporan_Pelanggaran_${periodFilter.value}_${
+            new Date().toISOString().split("T")[0]
+          }.pdf`
+        );
+      });
+
+      // Modal untuk gambar screenshot
+      const imageModal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("modalImage");
+      const images = document.querySelectorAll(".screenshot-img");
+      const imageCloseBtn = imageModal.querySelector(".close-btn");
+
       images.forEach((img) => {
-        img.addEventListener("click", function () {
-          modal.style.display = "flex"; // Tampilkan modal
-          modalImg.src = this.src; // Set gambar di modal
+        img.addEventListener("click", function (e) {
+          e.stopPropagation();
+          imageModal.style.display = "flex";
+          modalImg.src = this.src;
         });
       });
 
-      // Tutup modal saat tombol close diklik
-      closeBtn.addEventListener("click", function () {
-        modal.style.display = "none";
+      imageCloseBtn.addEventListener("click", function () {
+        imageModal.style.display = "none";
       });
 
-      // Tutup modal saat klik di luar gambar
-      modal.addEventListener("click", function (event) {
-        if (event.target === modal) {
-          modal.style.display = "none";
+      imageModal.addEventListener("click", function (event) {
+        if (event.target === imageModal) {
+          imageModal.style.display = "none";
         }
       });
 
-      // Toggle hamburger menu on mobile
+      // Modal untuk detail pelanggaran
+      const detailModal = document.getElementById("detailModal");
+      const detailWaktu = document.getElementById("detailWaktu");
+      const detailLokasi = document.getElementById("detailLokasi");
+      const detailJenis = document.getElementById("detailJenis");
+      const detailConfidence = document.getElementById("detailConfidence");
+      const detailTindakan = document.getElementById("detailTindakan");
+      const detailScreenshot = document.getElementById("detailScreenshot");
+      const detailCloseBtn = detailModal.querySelector(".close-btn");
+
+      rows.forEach((row) => {
+        row.addEventListener("click", function (e) {
+          if (e.target.classList.contains("screenshot-img")) return;
+
+          detailModal.style.display = "flex";
+          detailWaktu.textContent = this.dataset.waktu;
+          detailLokasi.textContent = this.dataset.lokasi;
+          detailJenis.textContent = this.dataset.jenis;
+          detailConfidence.textContent = this.dataset.confidence;
+          detailTindakan.textContent = this.dataset.tindakan;
+
+          detailScreenshot.innerHTML = "";
+          if (this.dataset.screenshot !== "Tidak ada screenshot") {
+            const img = document.createElement("img");
+            img.src = this.dataset.screenshot;
+            img.alt = "Screenshot";
+            img.classList.add("detail-screenshot");
+            detailScreenshot.appendChild(img);
+          } else {
+            detailScreenshot.textContent = "Tidak ada screenshot";
+          }
+        });
+      });
+
+      detailCloseBtn.addEventListener("click", function () {
+        detailModal.style.display = "none";
+      });
+
+      detailModal.addEventListener("click", function (event) {
+        if (event.target === detailModal) {
+          detailModal.style.display = "none";
+        }
+      });
+
+      // Fungsi untuk print
+      const printBtn = document.getElementById("printBtn");
+      printBtn.addEventListener("click", function () {
+        window.print();
+      });
+
+      // Toggle hamburger menu on mobile (jika ada)
       const hamburger = document.querySelector(".hamburger");
       const navLinks = document.querySelector(".nav-links");
 
-      hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-      });
+      if (hamburger && navLinks) {
+        hamburger.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
+        });
+      }
+
+      // Filter tabel saat halaman dimuat
+      filterTable();
     </script>
   </body>
 </html>
