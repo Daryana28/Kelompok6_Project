@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -28,7 +26,6 @@ SECRET_KEY = 'django-insecure-*)khia&9bfnq-2(7*!5zegvg#1=t)&me=k*p4f)+u2-3_)c1z!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -78,7 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webapp.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -87,13 +83,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cctv_server',
         'USER': 'root',      # Ganti dengan username MySQL Anda
-        'PASSWORD': '',   # Ganti dengan kata sandi MySQL Anda
+        'PASSWORD': 'mysql123',   # Ganti dengan kata sandi MySQL Anda
         'HOST': 'localhost',        # Atau alamat server MySQL jika tidak lokal
         'PORT': '3306',             # Port MySQL (default 3306)
 
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -113,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -125,7 +119,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -135,15 +128,22 @@ LOGIN_URL ='/login/'
 
 LOGOUT_REDIRECT_URL = '/'
 
-
 # webapp/settings.py
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
-    
-    os.path.join(BASE_DIR, 'apd_report/static'),
+    os.path.join(BASE_DIR, 'apd_report', 'static'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+
+TIME_ZONE = 'Asia/Jakarta'
+USE_TZ = True

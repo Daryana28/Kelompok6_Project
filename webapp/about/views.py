@@ -108,18 +108,16 @@ def detect_objects(frame):
         current_time = time.time()
         if current_time - last_screenshot_time >= COOLDOWN_SECONDS:
             timestamp = time.strftime("%Y%m%d-%H%M%S")  # Format: YYYYMMDD-HHMMSS
-            screenshot_path = os.path.join(SCREENSHOT_DIR, f"no_helmet_furthest_{timestamp}.jpg")
-            cv2.imwrite(screenshot_path, furthest_no_helmet_frame)
-            last_screenshot_time = current_time
-            print(f"📸 Screenshot 'no-helmet' terjauh disimpan: {screenshot_path}")
+            file_name = f"no_helmet_furthest_{timestamp}.jpg"
+            file_full_path = os.path.join(SCREENSHOT_DIR, file_name)
+            cv2.imwrite(file_full_path, furthest_no_helmet_frame)
 
-            # Simpan ke database
             Pelanggaran.objects.create(
                 jenis_pelanggaran="No Helmet",
-                screenshot_path=screenshot_path,
+                screenshot_path=file_name,  # ❗ hanya nama file, tanpa path!
                 confidence=furthest_confidence,
             )
-            print(f"💾 Data pelanggaran disimpan ke database: {screenshot_path}")
+            print(f"💾 Data pelanggaran disimpan ke database: {file_name}")
 
         else:
             print(f"⏳ Cooldown: Menunggu {COOLDOWN_SECONDS - (current_time - last_screenshot_time):.2f} detik untuk screenshot berikutnya.")

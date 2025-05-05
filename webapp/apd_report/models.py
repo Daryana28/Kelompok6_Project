@@ -6,7 +6,7 @@ class Pelanggaran(models.Model):
     lokasi = models.CharField(max_length=255, default="Lokasi Tidak Diketahui")
     jenis_pelanggaran = models.CharField(max_length=255)
     tindakan = models.TextField(default="Peringatan")
-    screenshot_path = models.CharField(max_length=255, blank=True, null=True)  # Path ke screenshot
+    screenshot_path = models.CharField(max_length=255) # Path ke screenshot
     confidence = models.FloatField(blank=True, null=True)  # Skor confidence dari YOLOv8
 
     def __str__(self):
