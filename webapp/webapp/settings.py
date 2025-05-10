@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cctv_server',
         'USER': 'root',      # Ganti dengan username MySQL Anda
-        'PASSWORD': 'mysql123',   # Ganti dengan kata sandi MySQL Anda
+        'PASSWORD': '',   # Ganti dengan kata sandi MySQL Anda
         'HOST': 'localhost',        # Atau alamat server MySQL jika tidak lokal
         'PORT': '3306',             # Port MySQL (default 3306)
 

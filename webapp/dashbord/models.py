@@ -11,3 +11,4 @@ class Pelanggaran(models.Model):
 
     def __str__(self):
         return f"{self.jenis_pelanggaran} at {self.lokasi}"
+
